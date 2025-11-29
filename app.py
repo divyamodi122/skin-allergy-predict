@@ -1,14 +1,17 @@
-from flask import Flask, render_template, request           #flask ko import kiya webapp banan k liye
-import tensorflow as tf                                #model load krne k liye
-import numpy as np                                     #array processing
-from tensorflow.keras.preprocessing import image            #image module image load kliye
-import os                                           #os file path banane k liye
+from flask import Flask, render_template, request
+import tensorflow as tf
+import numpy as np
+from tensorflow.keras.preprocessing import image
+import os
+import uuid
 
-# Load model
+# Load trained CNN model
 model = tf.keras.models.load_model("skin_cnn_model.keras")
 
-app = Flask(__name__)                              #flask application ka object bannata hai
+# Flask app
+app = Flask(__name__)
 
+# Class names and medicine dictionary
 class_names = [
     "Eczema",
     "Melanoma",
@@ -33,7 +36,9 @@ medicine = {
     "Fungal Infection": "Clotrimazole cream, Ketoconazole soap"
 }
 
+# Routes
 @app.route("/")
+@app.route("/home")
 def home():
     return render_template("home.html")
 
@@ -41,40 +46,36 @@ def home():
 def index():
     return render_template("index.html")
 
-@app.route("/predict", methods=["POST"])                   #user image upload karta hai to prdict button se request post s yha ati hainimage nd run hoti hai
+@app.route("/predict", methods=["POST"])
 def predict():
-    file = request.files.get("file")                #form se jo image bhji gye hai uspe access 
-
+    file = request.files.get("file")
     if file is None or file.filename == "":
         return "No file uploaded!"
 
-    # Save file
+    # Save uploaded file in static folder
     upload_folder = os.path.join(app.root_path, "static")
     os.makedirs(upload_folder, exist_ok=True)
-
-    file_path = os.path.join(upload_folder, "uploaded.jpg")
+    filename = str(uuid.uuid4()) + ".jpg"
+    file_path = os.path.join(upload_folder, filename)
     file.save(file_path)
 
-    # Preprocessing--- image upload krta hai ,size fix 180*180 main, numpt array main convert krta nd normalize krta 0-255 to 0-1
-    img = image.load_img(file_path, target_size=(180, 180))
+    # Preprocess image for model
+    img = image.load_img(file_path, target_size=(180, 180))  # same size as model input
     img_array = image.img_to_array(img)
-    img_array = np.expand_dims(img_array, axis=0) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)
 
-    # Prediction- - model disease ka probabilty output deta hai
-    prediction = model.predict(img_array)
-    index_pred = np.argmax(prediction)                 #argmax se max probability index milta hai
-    disease = class_names[index_pred]                 #index k hisab se diseases ka nm milta nd dictionry s medicine milti hai
+    # Predict
+    prediction = model.predict(img_array)[0]
+    index_pred = np.argmax(prediction)
+    disease = class_names[index_pred]
     med = medicine[disease]
 
-    return render_template("result.html",            
+    # Render result page
+    return render_template("result.html",
                            disease=disease,
                            medicine=med,
-                           img="uploaded.jpg")
+                           img=filename)
 
-
+# Run Flask
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=2222, debug=True)
-
-#render_templates -- html file show krta hai [flask python code ko html se connect karta hai]
-#request --- user se input leta hai(file,form,button)
-#template variable -- python se html me data bhjeta hain

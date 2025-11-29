@@ -5,45 +5,56 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            padding: 30px;
-            background: #f0f0f0;
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+            background: url('/static/skin_background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+
         .card {
-            background: white;
-            padding: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px 40px;
             max-width: 500px;
-            margin: auto;
-            border-radius: 10px;
-            box-shadow: 0 0 10px #ccc;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            text-align: center;
         }
+
+        h2 { color: #333; margin-bottom: 20px; }
+        h3 { color: teal; margin-top: 20px; }
+        p { color: #555; line-height: 1.5; }
         .btn {
             background: teal;
             color: white;
-            padding: 10px 20px;
-            margin-top: 15px;
+            padding: 12px 25px;
+            margin-top: 20px;
             text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
             display: inline-block;
-            border-radius: 5px;
+            transition: 0.3s;
         }
-        h3 { color: teal; }
+        .btn:hover { background: #006666; }
     </style>
 </head>
 <body>
+    <div class="card">
+        <h2>Welcome to Skin Disease Detection App</h2>
 
-<div class="card">
-    <h2>Welcome to Skin Disease Detection App</h2>
+        <h3>About Me</h3>
+        <p><b>Name:</b> Divya Modi</p>
+        <p><b>Contact:</b> 987XXXXXXX</p>
 
-    <h3>About Me</h3>
-    <p><b>Name:</b> Divya Modi</p>
-    <p><b>Contact:</b> 987XXXXXXX</p>
+        <p>
+            This project predicts various skin diseases like eczema, fungal infection,
+            psoriasis, melanoma, etc., and also provides suggested medicines.
+        </p>
 
-    <p>
-        This project predicts various skin diseases like eczema, fungal infection,
-        psoriasis, melanoma etc and also gives medicine suggestions.
-    </p>
-
-    <a class="btn" href="/index">Go to Prediction Page</a>
-</div>
-
+        <a class="btn" href="/index">Go to Prediction Page</a>
+    </div>
 </body>
 </html>

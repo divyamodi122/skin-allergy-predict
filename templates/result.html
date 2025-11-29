@@ -2,17 +2,64 @@
 <html>
 <head>
     <title>Prediction Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+            background: url('/static/skin_background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px 40px;
+            max-width: 600px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        h2 { color: #333; margin-bottom: 15px; }
+        h3 { color: teal; margin-bottom: 15px; }
+        p { color: #555; line-height: 1.5; font-size: 16px; }
+
+        img {
+            max-width: 250px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 2px solid #ccc;
+        }
+
+        .btn {
+            background: teal;
+            color: white;
+            padding: 12px 25px;
+            margin: 10px 5px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .btn:hover { background: #006666; }
+    </style>
 </head>
 <body>
+    <div class="card">
+        <h2>Prediction Result</h2>
 
-<h2>Disease: {{ disease }}</h2>
-<h3>Medicine: {{ medicine }}</h3>
+        <img src="{{ url_for('static', filename=img) }}" alt="Uploaded Image">
 
-<img src="/static/{{ img }}" width="250">
+        <h3>Disease: {{ disease }}</h3>
+        <p><b>Recommended Medicine:</b> {{ medicine }}</p>
 
-<br><br>
-<a href="/index">Predict Another</a> |
-<a href="/home">Home</a>
-
+        <a class="btn" href="/index">Predict Another</a>
+        <a class="btn" href="/home">Home</a>
+    </div>
 </body>
 </html>
